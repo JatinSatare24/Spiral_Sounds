@@ -1,0 +1,20 @@
+{
+  "name": "spiral_sounds",
+  "version": "1.0.0",
+  "description": "A vintage music store",
+  "homepage": "https://github.com/JatinSatare24/Spiral_Sounds#readme",
+  "bugs": {
+    "url": "https://github.com/JatinSatare24/Spiral_Sounds/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JatinSatare24/Spiral_Sounds.git"
+  },
+  "license": "ISC",
+  "author": "Jatin Satare",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

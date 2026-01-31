@@ -42,13 +42,12 @@ export async function registerUser(req, res) {
     const hashed = await bcrypt.hash(password, 10)
 
     const result = await db.run('INSERT INTO users (name, email, username, password) VALUES (?, ?, ?, ?)', [name, email, username, hashed])
-    console.log(result)
 
     req.session.userId = result.lastID
 
     res.status(201).json({ message: 'User registered' })
   } catch (err) {
-
+ 
     console.error('Registration error:', err.message);
     res.status(500).json({ error: 'Registration failed. Please try again.' })
 
@@ -61,7 +60,7 @@ export async function loginUser(req, res) {
   let { username, password } = req.body
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'All fields are required' })
+    return res.status(400).json({ error: 'All fields are required' } )
   }
 
   username = username.trim()
@@ -72,14 +71,14 @@ export async function loginUser(req, res) {
     const user = await db.get('SELECT * FROM users WHERE username = ?', [username])
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' })
+      return res.status(401).json({ error: 'Invalid credentials'})
     }
 
     const isValid = await bcrypt.compare(password, user.password)
 
     if (!isValid) {
 
-      return res.status(401).json({ error: 'Invalid credentials' })
+      return res.status(401).json({ error: 'Invalid credentials'})
 
     }
 
@@ -92,31 +91,13 @@ export async function loginUser(req, res) {
   }
 }
 
+
 export async function logoutUser(req, res) {
 
-  req.session.destroy(err => {
-    if (err) {
-      return res.status(500).send("Failed to logout")
-    }
-    res.clearCookie("connect.sid")
+  req.session.destroy( () => {
+
     res.json({ message: 'Logged out' })
+
   })
 
-
 }
-
-/*
-Challenge:
-1. Create a function which logs out the user. 
-- You can use the .destroy() method directly on the session.
-- .destroy() takes a callback function which you can use to send a confirmation response with this JSON:
-  { message: 'Logged out' }
-
-You will need to write code here and in one other place!
-
-Test with:
-username: test
-password: test
-*/
-
-

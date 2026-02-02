@@ -77,9 +77,9 @@ a {
 }
 
 /* Commented out for recording */
-a:visited {
-    /* color: var(--color-accent); */
-}
+/* a:visited {
+    color: var(--color-accent);
+} */
 
 a:hover {
     color: var(--color-accent);

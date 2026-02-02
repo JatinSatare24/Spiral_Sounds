@@ -42,12 +42,14 @@ export async function registerUser(req, res) {
     const hashed = await bcrypt.hash(password, 10)
 
     const result = await db.run('INSERT INTO users (name, email, username, password) VALUES (?, ?, ?, ?)', [name, email, username, hashed])
-
+    console.log('result:',result)
+    console.log('session:',req.session)
     req.session.userId = result.lastID
+    console.log('session:',req.session)
 
     res.status(201).json({ message: 'User registered' })
   } catch (err) {
- 
+
     console.error('Registration error:', err.message);
     res.status(500).json({ error: 'Registration failed. Please try again.' })
 
@@ -60,7 +62,7 @@ export async function loginUser(req, res) {
   let { username, password } = req.body
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'All fields are required' } )
+    return res.status(400).json({ error: 'All fields are required' })
   }
 
   username = username.trim()
@@ -71,14 +73,14 @@ export async function loginUser(req, res) {
     const user = await db.get('SELECT * FROM users WHERE username = ?', [username])
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials'})
+      return res.status(401).json({ error: 'Invalid credentials' })
     }
 
     const isValid = await bcrypt.compare(password, user.password)
 
     if (!isValid) {
 
-      return res.status(401).json({ error: 'Invalid credentials'})
+      return res.status(401).json({ error: 'Invalid credentials' })
 
     }
 
@@ -94,7 +96,7 @@ export async function loginUser(req, res) {
 
 export async function logoutUser(req, res) {
 
-  req.session.destroy( () => {
+  req.session.destroy(() => {
 
     res.json({ message: 'Logged out' })
 
